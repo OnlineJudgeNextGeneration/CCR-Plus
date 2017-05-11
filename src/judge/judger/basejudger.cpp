@@ -6,6 +6,9 @@
 #include <QDomDocument>
 #include <QElapsedTimer>
 #include <QCoreApplication>
+#include<fstream>
+#include<string>
+using namespace std;
 
 #include "common/global.h"
 #include "common/player.h"
@@ -181,10 +184,21 @@ Global::CompileResult BaseJudger::compile(const Compiler* compiler, QString& res
     if (!file.copy(tmp_dir + compiler->SourceFile()))
         return resultNote = "选手源代码拷贝失败", Global::OtherCompileError;
 
+    QString cmd=compiler->Cmd();
+    ifstream fin((tmp_dir+compiler->SourceFile()).toStdString());
+    string line;
+    while(getline(fin,line))
+    {
+        if(line.find("<gmp.h>")!=string::npos)
+            cmd+=" -lgmp";
+        if(line.find("<gmpxx.h>")!=string::npos)
+            cmd+=" -lgmpxx -lgmp";
+    }
+
     QProcess process;
     process.setProcessChannelMode(QProcess::MergedChannels);
     process.setWorkingDirectory(tmp_dir);
-    process.start(compiler->Cmd());
+    process.start(cmd);
     if (!process.waitForStarted(-1))
         return resultNote = "无效的编译器", Global::InvalidCompiler;
 
@@ -226,7 +240,7 @@ TestCaseResult BaseJudger::runProgram(const QString& exe, double timeLim, double
     PROCESS_INFORMATION pi;
     PROCESS_MEMORY_COUNTERS pmc;
     FILETIME ct, et, kt, ut;
-    SYSTEMTIME _kt, _ut;
+    SYSTEMTIME _ut;
 
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(si);
@@ -255,22 +269,13 @@ TestCaseResult BaseJudger::runProgram(const QString& exe, double timeLim, double
         }
 
         GetProcessTimes(pi.hProcess, &ct, &et, &kt, &ut);
-        FileTimeToSystemTime(&kt, &_kt);
         FileTimeToSystemTime(&ut, &_ut);
-        double usedTime = _ut.wHour * 3600 + _ut.wMinute * 60 + _ut.wSecond + _ut.wMilliseconds / 1000.0;
-        double kernelTime = _kt.wHour * 3600 + _kt.wMinute * 60 + _kt.wSecond + _kt.wMilliseconds / 1000.0;
-        double blockTime = timer.elapsed() / 1000.0 - usedTime - kernelTime;
 
-        if (usedTime > timeLim || kernelTime > timeLim || blockTime > 1.5)
+        if (timer.elapsed()/1000.0 > timeLim)
         {
             TerminateProcess(pi.hProcess, 0);
             onProcessFinished(pi);
-            if (usedTime > timeLim)
-                return TestCaseResult(0, timeLim, 'T', "超过时间限制");
-            else if (kernelTime > timeLim)
-                return TestCaseResult(0, timeLim, 'T', "系统 CPU 时间过长");
-            else
-                return TestCaseResult(0, 0, 'R', "进程被阻塞");
+            return TestCaseResult(0, timeLim, 'T', "超过时间限制");
         }
 
         QCoreApplication::processEvents();
