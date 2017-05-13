@@ -2,6 +2,7 @@
 #define JUDGETHREAD_H
 
 #include <QThread>
+#include <QPair>
 
 #include "common/const.h"
 
