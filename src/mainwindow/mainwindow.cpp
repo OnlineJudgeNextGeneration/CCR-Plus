@@ -779,15 +779,16 @@ void MainWindow::on_action_about_triggered()
     msgBox.setWindowTitle("关于 CCR Plus");
     msgBox.setStyleSheet("QMessageBox{background-color:rgb(250,250,250);}");
     msgBox.setText(QString(
-                      "<h2>CCR Plus 测评器<br/></h2>"
+                      "<h1>CCR Plus 测评器<br/></h1>"
                       "<p>版本：%1</p>"
                       "<p>构建时间：%2 - %3</p>"
-                      "<p>Copyright © %4 绍兴一中 贾越凯。保留所有权利。<br/></p>"
+                      "<p>Copyright © %4 绍兴一中 贾越凯。保留所有权利。</p>"
+                      "<p>修改 by zhzh2001<br/></p>"
 
                       "<p>项目主页：<a href=\"https://github.com/sxyzccr/CCR-Plus\">https://github.com/sxyzccr/CCR-Plus</a></p>"
                       "<p>下载地址: <a href=\"https://github.com/sxyzccr/CCR-Plus/releases\">https://github.com/sxyzccr/CCR-Plus/releases</a></p>"
                       "<p>Bug 汇报: <a href=\"https://github.com/sxyzccr/CCR-Plus/issues\">https://github.com/sxyzccr/CCR-Plus/issues</a></p>"
-                      "<p>GitHub 贡献者: <a href=\"https://github.com/equation314\">equation314</a>, <a href=\"https://github.com/wwt17\">wwt17</a><br/></p>"
+                      "<p>GitHub 贡献者: <a href=\"https://github.com/equation314\">equation314</a>, <a href=\"https://github.com/wwt17\">wwt17</a>，<a href=\"https://github.com/zhzh2001\">zhzh2001</a><br/></p>"
 
                       "<p>本项目使用 <a href=\"http://www.gnu.org/licenses/gpl-3.0.html\">GNU 通用公共许可证</a>。</p>"
                       "<p>感谢原版 CCR 以及 <a href=\"http://code.google.com/p/project-lemon\">project-lemon</a>，<a href=\"http://www.hustoj.com\">HUSTOJ</a> 等开源项目。</p>"

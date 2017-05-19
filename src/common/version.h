@@ -2,7 +2,7 @@
 #define VERSION_H
 
 #define YEAR_STRING "2017"
-#define DATE_STRING YEAR_STRING "0220"
+#define DATE_STRING YEAR_STRING "0519"
 
 #if defined(Q_OS_WIN)
 #   define PLATFORM_INFO "Windows 32-bit"
