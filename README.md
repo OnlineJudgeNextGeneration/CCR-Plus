@@ -4,13 +4,14 @@ CCR Plus 是一款适用于 NOI(National Olympiad in Informatics) 系列比赛�
 
 ## 下载与安装
 ### 下载地址
-<https://github.com/sxyzccr/CCR-Plus/releases>
+<https://github.com/zhzh2001/CCR-Plus/releases>
 
 ### 安装及使用说明：
 #### Windows
 解压下载文件到安装目录，无需安装，直接双击 `CCR-Plus.exe` 运行程序。可自行创建桌面快捷方式。
 
 #### Linux
+
 解压下载文件到安装目录，双击运行 `install.sh`，把生成的图标复制到任意位置，再双击图标运行程序。
 
 
@@ -22,6 +23,7 @@ CCR Plus 是一款适用于 NOI(National Olympiad in Informatics) 系列比赛�
 
 
 ## 新增功能
+
 下面列出了 CCR Plus 相对于原版 CCR 的重大改进：
 
 1. 支持 Linux 操作系统。
@@ -34,7 +36,18 @@ CCR Plus 是一款适用于 NOI(National Olympiad in Informatics) 系列比赛�
 8. 强大的高级配置功能，支持修改编译器、修改测试点、打包测试点等功能。
 
 
+by zhzh2001:
+
+1. 删除令人困惑的“进程被阻塞”，简化超时判定，允许多线程的解答。
+2. 默认识别代码并自动链接[GMP](https://gmplib.org/),[MPFR](http://www.mpfr.org/),GCC libquadmath等数学库，可以手动禁止。
+
+## TO-DO-LIST
+
+- [ ] 手动指定超时判定方式
+- [ ] 加入帮助文件
+
 ## 注意事项
+
 ### Windows
 1. 如果界面字体显示不正常(很难看)，请安装字体“微软雅黑”。
 2. 如果使用选手名单后中文显示乱码，请转换名单的文件编码为 ANSI，行尾格式为 Windows。

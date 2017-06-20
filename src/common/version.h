@@ -2,7 +2,7 @@
 #define VERSION_H
 
 #define YEAR_STRING "2017"
-#define DATE_STRING YEAR_STRING "0519"
+#define DATE_STRING YEAR_STRING "0620"
 
 #if defined(Q_OS_WIN)
 #   define PLATFORM_INFO "Windows 32-bit"
@@ -14,7 +14,7 @@
 #   endif
 #endif
 
-#define VERSION_SHORTER "1.1.0"
+#define VERSION_SHORTER "1.2.0"
 #define VERSION_SHORT "v" VERSION_SHORTER
 #define VERSION_LONG VERSION_SHORT " (" PLATFORM_INFO ")"
 #define VERSION_LONGER VERSION_SHORT " " DATE_STRING " (" PLATFORM_INFO ")"
