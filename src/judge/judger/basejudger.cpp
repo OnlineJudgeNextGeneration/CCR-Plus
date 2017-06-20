@@ -257,8 +257,6 @@ TestCaseResult BaseJudger::runProgram(const QString& exe, double timeLim, double
     STARTUPINFO si;
     PROCESS_INFORMATION pi;
     PROCESS_MEMORY_COUNTERS pmc;
-    FILETIME ct, et, kt, ut;
-    SYSTEMTIME _ut;
 
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(si);
@@ -286,9 +284,6 @@ TestCaseResult BaseJudger::runProgram(const QString& exe, double timeLim, double
             return TestCaseResult(0, 0, 'M', "超过内存限制");
         }
 
-        GetProcessTimes(pi.hProcess, &ct, &et, &kt, &ut);
-        FileTimeToSystemTime(&ut, &_ut);
-
         if (timer.elapsed()/1000.0 > timeLim)
         {
             TerminateProcess(pi.hProcess, 0);
@@ -310,10 +305,7 @@ TestCaseResult BaseJudger::runProgram(const QString& exe, double timeLim, double
 
     GetProcessMemoryInfo(pi.hProcess, &pmc, sizeof(pmc));
     double usedMemory = pmc.PeakPagefileUsage / 1024.0 / 1024.0;
-
-    GetProcessTimes(pi.hProcess, &ct, &et, &kt, &ut);
-    FileTimeToSystemTime(&ut, &_ut);
-    double usedTime = _ut.wHour * 3600 + _ut.wMinute * 60 + _ut.wSecond + _ut.wMilliseconds / 1000.0;
+    double usedTime = timer.elapsed()/1000.0;
 
     onProcessFinished(pi);
 
