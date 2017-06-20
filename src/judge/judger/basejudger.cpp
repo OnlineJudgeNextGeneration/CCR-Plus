@@ -185,14 +185,32 @@ Global::CompileResult BaseJudger::compile(const Compiler* compiler, QString& res
         return resultNote = "选手源代码拷贝失败", Global::OtherCompileError;
 
     QString cmd=compiler->Cmd();
-    ifstream fin((tmp_dir+compiler->SourceFile()).toStdString());
-    string line;
-    while(getline(fin,line))
+    if(!compiler->Nolib())
     {
-        if(line.find("<gmp.h>")!=string::npos)
+        ifstream fin((tmp_dir+compiler->SourceFile()).toStdString());
+        string line;
+        bool gmp=false,gmpxx=false,mpfr=false,qmath=false;
+        while(getline(fin,line))
+        {
+            if(line.find("gmp.h")!=string::npos)
+                gmp=true;
+            if(line.find("gmpxx.h")!=string::npos)
+                gmp=gmpxx=true;
+            if(line.find("mpreal.h")!=string::npos)
+                mpfr=gmp=true;
+            if(line.find("mpfr.h")!=string::npos)
+                mpfr=gmp=true;
+            if(line.find("quadmath.h")!=string::npos)
+                qmath=true;
+        }
+        if(gmpxx)
+            cmd+=" -lgmpxx";
+        if(mpfr)
+            cmd+=" -lmpfr";
+        if(gmp)
             cmd+=" -lgmp";
-        if(line.find("<gmpxx.h>")!=string::npos)
-            cmd+=" -lgmpxx -lgmp";
+        if(qmath)
+            cmd+=" -lquadmath";
     }
 
     QProcess process;

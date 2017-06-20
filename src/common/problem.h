@@ -9,16 +9,17 @@ class QStringList;
 class Compiler
 {
 public:
-    explicit Compiler(const QString& cmd, const QString& file, int time = 10) :
-        cmd(cmd), file(file), time_lim(time) {}
+    explicit Compiler(const QString& cmd, const QString& file, int time = 10, bool nolib=false) :
+        cmd(cmd), file(file), time_lim(time), nolib(nolib) {}
 
     Compiler(const Compiler& compiler) :
-        cmd(compiler.cmd), file(compiler.file), time_lim(compiler.time_lim) {}
+        cmd(compiler.cmd), file(compiler.file), time_lim(compiler.time_lim), nolib(compiler.nolib) {}
 
     // Getter member functions
     QString Cmd() const { return cmd; }
     QString SourceFile() const { return file; }
     int TimeLimit() const { return time_lim; }
+    bool Nolib() const { return nolib; }
 
     static const int BUILTIN_COMPILER_COUNT = 3;
     static const QStringList BUILTIN_COMPILER_CMD;
@@ -27,6 +28,7 @@ public:
 private:
     QString cmd, file;
     int time_lim;
+    bool nolib;
 };
 
 
@@ -224,6 +226,7 @@ private:
 
     /// 自动获取输入输出文件对
     QList<QPair<QString, QString>> getInAndOutFile();
+    bool nolib;
 };
 
 #endif // PROBLEM_H

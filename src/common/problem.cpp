@@ -57,7 +57,7 @@ Problem::Problem(const QString& name) :
     type(Global::OtherProblemType),
     name(name), dir(name), exe(AddFileExtension(name)), checker(),
     in_file(name + ".in"), out_file(name + ".out"),
-    score(100), checker_time_lim(10), code_len_lim(100)
+    score(100), checker_time_lim(10), code_len_lim(100), nolib(false)
 {
 
 }
@@ -66,7 +66,7 @@ Problem::Problem(const Problem& problem) :
     type(problem.type),
     name(problem.name), dir(problem.dir), exe(problem.exe), checker(problem.checker),
     in_file(problem.in_file), out_file(problem.out_file),
-    score(problem.score), checker_time_lim(problem.checker_time_lim), code_len_lim(problem.code_len_lim)
+    score(problem.score), checker_time_lim(problem.checker_time_lim), code_len_lim(problem.code_len_lim), nolib(problem.nolib)
 {
     for (auto i : problem.cases) cases.append(new TestCase(*i));
     for (auto i : problem.compilers) compilers.append(new Compiler(*i));
@@ -132,6 +132,8 @@ void Problem::ReadConfiguration()
             if (a.hasAttribute("dir")) dir = a.attribute("dir");
             if (a.hasAttribute("file")) exe = AddFileExtension(a.attribute("file"));
             if (a.hasAttribute("code")) code_len_lim = a.attribute("code").toDouble();
+            if (a.hasAttribute("nolib"))
+                nolib=a.attribute("nolib").toInt();
 
             QDomNodeList l = a.childNodes();
             for (int j = 0; j < l.count(); j++)
@@ -141,9 +143,9 @@ void Problem::ReadConfiguration()
                 {
                     Compiler* x;
                     if (b.hasAttribute("time"))
-                        x =  new Compiler(b.attribute("cmd"), b.attribute("file"), b.attribute("time").toInt());
+                        x =  new Compiler(b.attribute("cmd"), b.attribute("file"), b.attribute("time").toInt(), nolib);
                     else
-                        x =  new Compiler(b.attribute("cmd"), b.attribute("file"));
+                        x =  new Compiler(b.attribute("cmd"), b.attribute("file"), nolib);
                     //if (x.file.endsWith(".cpp")||x.file.endsWith(".c")) x.cmd+=" -static";
                     this->compilers.append(x);
                 }
@@ -202,6 +204,7 @@ bool Problem::SaveConfiguration() const
     {
         source.setAttribute("file", RemoveFileExtension(exe));
         source.setAttribute("code", code_len_lim);
+        source.setAttribute("nolib", nolib);
         for (auto i : compilers)
         {
             QDomElement lang = doc.createElement("language");
